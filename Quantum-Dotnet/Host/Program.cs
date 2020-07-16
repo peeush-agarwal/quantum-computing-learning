@@ -9,11 +9,20 @@ namespace Host
     {
         static async System.Threading.Tasks.Task Main(string[] args)
         {
-            // using (var qsim = new QuantumSimulator())
-            // {
-            //     HelloQ.Run(qsim).Wait();
-            // }
+            await Demo_SuperpositionAsync(); return;
 
+            HelloWorld(); return;
+            
+        }
+    
+        static void HelloWorld(){
+            using (var qsim = new QuantumSimulator())
+            {
+                HelloQ.Run(qsim).Wait();
+            }
+        }
+
+        static async System.Threading.Tasks.Task Demo_SuperpositionAsync(){
             const int LOOP_MAX = 1000;
             var ones = 0;
             using (var qsim = new QuantumSimulator())
