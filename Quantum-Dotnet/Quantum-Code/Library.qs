@@ -18,4 +18,21 @@
         }
         return result;
     }
+
+    operation Entanglement() : (Result, Result) {
+        mutable resultOne = Zero;
+        mutable resultTwo = Zero;
+        using ((qubitOne, qubitTwo) = (Qubit(), Qubit())) {
+            H(qubitOne);
+            CNOT(qubitOne, qubitTwo);
+
+            set resultOne = M(qubitOne);
+            set resultTwo = M(qubitTwo);
+
+            Reset(qubitOne);
+            Reset(qubitTwo);
+        }
+
+        return (resultOne, resultTwo);
+    }
 }
