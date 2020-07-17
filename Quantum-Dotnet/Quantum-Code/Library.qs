@@ -35,4 +35,47 @@
 
         return (resultOne, resultTwo);
     }
+
+    operation Teleportation(sentMessage : Bool) : Bool {
+        mutable receivedMessage = false;
+        using (register = Qubit[3]) {
+            let messageQubit = register[0];
+            if(sentMessage){
+                X(messageQubit);
+            }
+
+            let alice = register[1];
+            let bob = register[2];
+
+            // Entangle Alice and Bob qubits together and suppose that these 2 qubits are light years distant apart.
+            H(alice);
+            CNOT(alice, bob);
+
+            // Transfer message to Alice qubit and this will Teleport message to Bob instantaneously
+            CNOT(messageQubit, alice);
+            H(messageQubit);
+
+            // Set the basis out of 4 Bell states correctly on Bob qubit.
+            let messageState = M(messageQubit);
+            let aliceState = M(alice);
+
+            // if message qubit is One, then flip the state of bob in Z-basis
+            if(messageState == One){
+                Z(bob);
+            }
+            
+            // if alice qubit is One, then flip the state of bob in X-basis
+            if(aliceState == One){
+                X(bob);
+            }
+
+            if(M(bob) == One){
+                set receivedMessage = true;
+            }
+
+            ResetAll(register);
+        }
+        
+        return receivedMessage;
+    }
 }
