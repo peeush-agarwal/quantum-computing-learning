@@ -9,12 +9,40 @@ namespace Host
     {
         static async System.Threading.Tasks.Task Main(string[] args)
         {
+            await Demo_TeleportationAsync(); return;
+            
             await Demo_EntanglementAsync(); return;
 
             await Demo_SuperpositionAsync(); return;
 
             HelloWorld(); return;
             
+        }
+
+        static async System.Threading.Tasks.Task Demo_TeleportationAsync(){
+            const int LOOP_MAX = 1000;
+            var trues = 0;
+            var equal = 0;
+            var random = new Random();
+            using (var qsim = new QuantumSimulator())
+            {
+                for (int i = 0; i < LOOP_MAX; i++)
+                {
+                    var message = random.Next(2) == 0;
+                    var result = await Teleportation.Run(qsim, message);
+
+                    if(result)
+                        trues++;
+                    
+                    if(result == message)
+                        equal++;
+                }
+            }
+
+            System.Console.WriteLine("Teleportation result:");
+            System.Console.WriteLine($"\t   True: {trues}");
+            System.Console.WriteLine($"\t  False: {LOOP_MAX - trues}");
+            System.Console.WriteLine($"\t  Equal: {100*equal/LOOP_MAX}%");
         }
     
         static async System.Threading.Tasks.Task Demo_EntanglementAsync(){
